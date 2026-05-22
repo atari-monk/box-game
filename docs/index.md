@@ -2,4 +2,5 @@
 
 ## Contents
 
-- [**Configuration**](configuration.md)
+- [Configuration](configuration.md)
+- [Page](page.md)

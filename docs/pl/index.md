@@ -2,4 +2,5 @@
 
 ## Zawartość
 
-- [**Konfiguracja**](configuration.md)
+- [Konfiguracja](configuration.md)
+- [Strona](page.md)

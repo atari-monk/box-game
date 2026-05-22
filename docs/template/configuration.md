@@ -1,3 +1,5 @@
+[pl](pl/configuration.md)
+
 ## Configuration
 
 ### Typescript Config

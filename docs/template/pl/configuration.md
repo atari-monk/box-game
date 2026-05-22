@@ -1,3 +1,5 @@
+[en](../configuration.md)
+
 ## Konfiguracja
 
 ### Konfiguracja TypeScript
