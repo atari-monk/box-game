@@ -101,7 +101,7 @@ Generate alias:
 alias prompt="node assemble.js"
 ```
 
-Zainstaluj zależności:
+Install dependency:
 
 ```sh
 pnpm i clipboardy
