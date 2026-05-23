@@ -9,14 +9,15 @@ import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
 const input = new Input();
-const audio = new Audio();
 
-const game = new Game(renderer, input, audio);
+const audio = new Audio();
 
 (async () => {
     await audio.load("move", "./sounds/move.wav");
     await audio.load("bg", "./sounds/bg.mp3");
 })();
+
+const game = new Game(renderer, input, audio);
 
 const overlay = document.getElementById("start-overlay");
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
