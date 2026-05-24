@@ -1,9 +1,11 @@
 import type { Renderer, Input, Audio } from "atari-monk-light-engine";
+import { Player } from "./oop/player";
 
 export type GameState = {
     renderer: Renderer;
     input: Input;
     audio: Audio;
+    player: Player;
 };
 
 export function createGame(
@@ -14,7 +16,8 @@ export function createGame(
     return {
         renderer,
         input,
-        audio
+        audio,
+        player: new Player()
     };
 }
 
@@ -22,6 +25,11 @@ export function updateGame(
     state: GameState,
     dt: number
 ) {
+    const moved = state.player.update(dt, state.input);
+
+    if (moved) {
+        state.audio.play("move");
+    }
 }
 
 export function renderGame(
@@ -29,6 +37,11 @@ export function renderGame(
     alpha: number
 ) {
     state.renderer.clear();
+
+    state.player.render(
+        state.renderer.ctx,
+        alpha
+    );
 }
 
 export function startGameMusic(state: GameState) {
