@@ -2,7 +2,7 @@
 
 ## Context
 
-{{include:docs/_template/bootstrap.md}}
+{{include:docs/_template/player.md}}
 
 ## Task
 
