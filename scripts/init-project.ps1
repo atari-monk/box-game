@@ -1,49 +1,129 @@
-$base = "/home/atari-monk/atari-monk/project/box-game"
+# =========================================
+# Structs (Classes)
+# =========================================
 
-$folders = @(
-    "$base/src",
-    "$base/scripts",
-    "$base/docs",
-    "$base/prompts",
-    "$base/sounds",
-    "$base/src/oop"
-)
+class ProjectConfig {
+    [string]$BasePath
+    [string[]]$Folders
+    [string[]]$Files
+}
 
-foreach ($folder in $folders) {
-    if (-not (Test-Path $folder)) {
-        New-Item -ItemType Directory -Path $folder | Out-Null
-        Write-Host "Created folder: $folder"
+# =========================================
+# Load Functions
+# =========================================
+
+function Load-ProjectConfig {
+    param (
+        [string]$ConfigPath
+    )
+
+    if (-not (Test-Path $ConfigPath)) {
+        throw "Config file not found: $ConfigPath"
+    }
+
+    $json = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+
+    $config = [ProjectConfig]::new()
+    $config.BasePath = $json.basePath
+    $config.Folders  = $json.folders
+    $config.Files    = $json.files
+
+    return $config
+}
+
+# =========================================
+# Path Functions
+# =========================================
+
+function Join-ProjectPath {
+    param (
+        [string]$BasePath,
+        [string]$RelativePath
+    )
+
+    return Join-Path $BasePath $RelativePath
+}
+
+# =========================================
+# Create Functions
+# =========================================
+
+function Create-Folder {
+    param (
+        [string]$Path
+    )
+
+    if (-not (Test-Path $Path)) {
+        New-Item -ItemType Directory -Path $Path | Out-Null
+        Write-Host "Created folder: $Path"
     }
     else {
-        Write-Host "Folder already exists: $folder"
+        Write-Host "Folder already exists: $Path"
     }
 }
 
-$files = @(
-    "$base/package.json",
-    "$base/tsconfig.json",
-    "$base/.gitignore",
+function Create-File {
+    param (
+        [string]$Path
+    )
 
-    "$base/index.html",
-    "$base/favicon.png",
-    "$base/src/styles.css",
-
-    "$base/src/player.ts",
-    "$base/src/game.ts",
-    "$base/src/main.ts",
-
-    "$base/src/oop/game.ts",
-    "$base/src/oop/player.ts"
-)
-
-foreach ($file in $files) {
-    if (-not (Test-Path $file)) {
-        New-Item -ItemType File -Path $file | Out-Null
-        Write-Host "Created file: $file"
+    if (-not (Test-Path $Path)) {
+        New-Item -ItemType File -Path $Path | Out-Null
+        Write-Host "Created file: $Path"
     }
     else {
-        Write-Host "File already exists: $file"
+        Write-Host "File already exists: $Path"
     }
 }
 
-Write-Host "box-game init project complete"
+# =========================================
+# Process Functions
+# =========================================
+
+function Initialize-Folders {
+    param (
+        [ProjectConfig]$Config
+    )
+
+    foreach ($folder in $Config.Folders) {
+        $fullPath = Join-ProjectPath `
+            -BasePath $Config.BasePath `
+            -RelativePath $folder
+
+        Create-Folder -Path $fullPath
+    }
+}
+
+function Initialize-Files {
+    param (
+        [ProjectConfig]$Config
+    )
+
+    foreach ($file in $Config.Files) {
+        $fullPath = Join-ProjectPath `
+            -BasePath $Config.BasePath `
+            -RelativePath $file
+
+        Create-File -Path $fullPath
+    }
+}
+
+# =========================================
+# Main
+# =========================================
+
+function Main {
+
+    $configPath = Join-Path $PSScriptRoot "init-project.json"
+
+    $config = Load-ProjectConfig `
+        -ConfigPath $configPath
+
+    Initialize-Folders -Config $config
+    Initialize-Files   -Config $config
+
+    Write-Host ""
+    Write-Host "box-game init project complete"
+}
+
+Main

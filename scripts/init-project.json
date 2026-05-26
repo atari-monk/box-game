@@ -1,0 +1,24 @@
+{
+    "basePath": "/home/atari-monk/atari-monk/project/box-game",
+    "folders": [
+        "src",
+        "scripts",
+        "docs",
+        "prompts",
+        "sounds",
+        "src/oop"
+    ],
+    "files": [
+        "package.json",
+        "tsconfig.json",
+        ".gitignore",
+        "index.html",
+        "favicon.png",
+        "src/styles.css",
+        "src/player.ts",
+        "src/game.ts",
+        "src/main.ts",
+        "src/oop/game.ts",
+        "src/oop/player.ts"
+    ]
+}
