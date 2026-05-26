@@ -5,7 +5,7 @@ import {
     Audio,
     GameLoop
 } from "atari-monk-light-engine";
-import { GameDev } from "./oop/game-dev";
+import { RectDemo } from "./demo/rect-demo";
 import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
@@ -18,7 +18,7 @@ const audio = new Audio();
     await audio.load("bg", "./sounds/bg.mp3");
 })();
 
-const game = new GameDev(renderer, input, audio);
+const game = new Game(renderer, input, audio);
 
 const overlay = document.getElementById("start-overlay");
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;

@@ -17,7 +17,7 @@ export function createGame(
         renderer,
         input,
         audio,
-        player: new Player()
+        player: new Player(960 - 25, 350, 200, 50)
     };
 }
 

@@ -1,9 +1,29 @@
-import type { Renderer, Input, Audio } from "atari-monk-light-engine";
-import { Player } from "./oop/player";
-import { Rect } from "./oop/rect";
-import { resolvePlayerRectCollisions } from "./rect-collision";
+import { type IGame, Renderer, Input, Audio } from "atari-monk-light-engine";
+import { Player } from "./../oop/player";
+import { Rect } from "./../oop/rect";
+import { resolvePlayerRectCollisions } from "./../rect-collision";
 
-export type GameState = {
+export class RectDemo implements IGame {
+    private state: GameState;
+
+    constructor(
+        renderer: Renderer,
+        input: Input,
+        audio: Audio
+    ) {
+        this.state = createGame(renderer, input, audio);
+    }
+
+    update(dt: number) {
+        updateGame(this.state, dt);
+    }
+
+    render(alpha: number) {
+        renderGame(this.state, alpha);
+    }
+}
+
+type GameState = {
     renderer: Renderer;
     input: Input;
     audio: Audio;
@@ -14,7 +34,7 @@ export type GameState = {
     rect_d: Rect;
 };
 
-export function createGame(
+function createGame(
     renderer: Renderer,
     input: Input,
     audio: Audio
@@ -23,7 +43,7 @@ export function createGame(
         renderer,
         input,
         audio,
-        player: new Player(),
+        player: new Player(960 - 25, 350, 200, 50),
         rect_a: new Rect(400, 200, 120, 80, "blue"),
         rect_b: new Rect(400 + 140, 200, 120, 80, "blue"),
         rect_c: new Rect(400, 200 + 200, 120, 80, "blue"),
@@ -31,7 +51,7 @@ export function createGame(
     };
 }
 
-export function updateGame(
+function updateGame(
     state: GameState,
     dt: number
 ) {
@@ -47,7 +67,7 @@ export function updateGame(
     );
 }
 
-export function renderGame(
+function renderGame(
     state: GameState,
     alpha: number
 ) {
