@@ -8,7 +8,11 @@ import {
 import { Input } from "atari-monk-light-engine";
 
 export class Player {
-    private state: PlayerState;
+    private _state: PlayerState;
+
+    get state() {
+        return this._state;
+    }
 
     constructor(
         x = 100,
@@ -16,30 +20,30 @@ export class Player {
         speed = 200,
         size = 50
     ) {
-        this.state = createPlayer(x, y, speed, size);
+        this._state = createPlayer(x, y, speed, size);
     }
 
     update(dt: number, input: Input) {
-        return updatePlayer(this.state, dt, input);
+        return updatePlayer(this._state, dt, input);
     }
 
     render(ctx: CanvasRenderingContext2D, alpha: number) {
-        renderPlayer(this.state, ctx, alpha);
+        renderPlayer(this._state, ctx, alpha);
     }
 
     get x() {
-        return this.state.x;
+        return this._state.x;
     }
 
     get y() {
-        return this.state.y;
+        return this._state.y;
     }
 
     set x(value: number) {
-        this.state.x = value;
+        this._state.x = value;
     }
 
     set y(value: number) {
-        this.state.y = value;
+        this._state.y = value;
     }
 }
