@@ -1,9 +1,10 @@
-# Translate Documentation Task
+# Translate Document
 
 ## Context
 
-{{include:docs/_template/player.md}}
+{{include:docs/init-project.md}}
 
 ## Task
 
-- Given my documentation translate it to polish
+- Translate it to polish
+- Dont change document, just translate

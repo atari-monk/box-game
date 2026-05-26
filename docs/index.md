@@ -3,6 +3,8 @@
 ## Contents
 
 - [Configuration](configuration.md)
+- Scripts
+    - [Init Project](init-project.md)
 - [Page](page.md)
 - [Bootstrap light engine](bootstrap.md)
 - [Basic/Prototype Player](player.md)
