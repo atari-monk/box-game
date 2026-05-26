@@ -1,10 +1,37 @@
-import type { Renderer, Input, Audio } from "atari-monk-light-engine";
-import { Player } from "./oop/player";
-import { createConveyorBelt, getConveyorColliders, renderConveyorBelt, toggleConveyorPoints, updateConveyorBelt, type ConveyorBeltState } from "./conveyor-belt";
-import type { RectState } from "./rect";
-import { resolvePlayerRectCollisions } from "./rect-collision";
+import { type IGame, Renderer, Input, Audio } from "atari-monk-light-engine";
+import { Player } from "./../oop/player";
+import { resolvePlayerRectCollisions } from "./../rect-collision";
+import {
+    createConveyorBelt,
+    renderConveyorBelt,
+    updateConveyorBelt,
+    getConveyorColliders,
+    type ConveyorBeltState,
+    toggleConveyorPoints
+} from "./../conveyor-belt";
+import type { RectState } from "../rect";
 
-export type GameState = {
+export class ConveyorBeltDemo implements IGame {
+    private state: GameState;
+
+    constructor(
+        renderer: Renderer,
+        input: Input,
+        audio: Audio
+    ) {
+        this.state = createGame(renderer, input, audio);
+    }
+
+    update(dt: number) {
+        updateGame(this.state, dt);
+    }
+
+    render(alpha: number) {
+        renderGame(this.state, alpha);
+    }
+}
+
+type GameState = {
     renderer: Renderer;
     input: Input;
     audio: Audio;
@@ -13,7 +40,7 @@ export type GameState = {
     colliders: RectState[];
 };
 
-export function createGame(
+function createGame(
     renderer: Renderer,
     input: Input,
     audio: Audio
@@ -37,7 +64,7 @@ export function createGame(
     };
 }
 
-export function updateGame(
+function updateGame(
     state: GameState,
     dt: number
 ) {
@@ -60,7 +87,7 @@ export function updateGame(
     }
 }
 
-export function renderGame(
+function renderGame(
     state: GameState,
     alpha: number
 ) {

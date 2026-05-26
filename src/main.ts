@@ -5,7 +5,8 @@ import {
     Audio,
     GameLoop
 } from "atari-monk-light-engine";
-import { RectDemo } from "./demo/rect-demo";
+import { RectDemo } from "./demo/rect";
+import { ConveyorBeltDemo } from "./demo/conveyor-belt";
 import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
