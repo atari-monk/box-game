@@ -10,3 +10,4 @@
 - [Basic/Prototype Player](player.md)
     - [Code](player-code.md)
 - [Rect module documentation](rect.md)
+- [Rect Player Collision](rect-collision.md)
