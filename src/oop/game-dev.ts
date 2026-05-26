@@ -4,9 +4,9 @@ import {
     createGame,
     updateGame,
     renderGame,
-} from "../game";
+} from "../game-dev";
 
-export class Game implements IGame {
+export class GameDev implements IGame {
     private state: GameState;
 
     constructor(
