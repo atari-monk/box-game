@@ -1,5 +1,3 @@
-# Write Documentation for Init Project Script
-
 ## Context
 
 {{include:scripts/init-project.ps1}}
@@ -7,6 +5,7 @@
 
 ## Task
 
+- Write documentation for init project script
 - Write what it does
 - Describe data
 - Usage section

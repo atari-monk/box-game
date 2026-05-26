@@ -1,5 +1,3 @@
-# Write Basic Player Documentation
-
 ## Context
 
 {{include:src/player.ts}}
@@ -10,7 +8,6 @@
 
 ## Task
 
-- Use code for context
 - Write documentation for basic player
 - Cover procedural base
 - OOP wrapper

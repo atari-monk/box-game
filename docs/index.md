@@ -9,3 +9,4 @@
 - [Bootstrap light engine](bootstrap.md)
 - [Basic/Prototype Player](player.md)
     - [Code](player-code.md)
+- [Rect module documentation](rect.md)

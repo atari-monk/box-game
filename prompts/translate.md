@@ -2,7 +2,7 @@
 
 ## Context
 
-{{include:docs/init-project.md}}
+{{include:docs/rect.md}}
 
 ## Task
 

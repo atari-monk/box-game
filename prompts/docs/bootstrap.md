@@ -1,5 +1,3 @@
-# Refine Light Engine Bootstrap Documentation
-
 ## Context
 
 {{include:docs/_template/bootstrap.md}}
@@ -12,7 +10,7 @@
 
 ## Task
 
-- Given my hand written documentation, refine it
+- Given my hand written, light engine bootstrap documentation, refine it
 - Fix any spelling mistakes
 - Fix logical mistakes
 - Expand if you think i have omitted important topics
