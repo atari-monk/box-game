@@ -1,4 +1,4 @@
-# Write Basic Player Documentation Task
+# Write Basic Player Documentation
 
 ## Context
 

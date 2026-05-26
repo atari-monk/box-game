@@ -1,4 +1,4 @@
-# Refactor Script Task
+# Refactor Init Project Script
 
 ## Context
 
