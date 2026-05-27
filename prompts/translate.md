@@ -2,7 +2,7 @@
 
 ## Context
 
-{{include:docs/rect-collision.md}}
+{{include:docs/box.md}}
 
 ## Task
 
