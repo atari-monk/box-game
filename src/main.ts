@@ -7,6 +7,7 @@ import {
 } from "atari-monk-light-engine";
 import { RectDemo } from "./demo/rect";
 import { ConveyorBeltDemo } from "./demo/conveyor-belt";
+import { BoxDemo } from "./demo/box";
 import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
