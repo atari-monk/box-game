@@ -39,10 +39,10 @@ function createGame(
     audio: Audio
 ): GameState {
     const boxes = [
-        createBox(650, 200),
-        createBox(650, 230),
-        createBox(650, 260),
-        createBox(650, 290)
+        createBox(650, 200, "red"),
+        createBox(650, 230, "green"),
+        createBox(650, 260, "yellow"),
+        createBox(650, 290, "purple")
     ];
 
     return {
