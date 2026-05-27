@@ -2,7 +2,7 @@
 
 ## Context
 
-{{include:docs/box-factory.md}}
+{{include:docs/box.md}}
 
 ## Task
 

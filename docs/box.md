@@ -1,109 +1,135 @@
 [pl](pl/box.md)
 
-# Box Module Documentation
-
-The `box.ts` module builds on top of the rectangle utilities from `rect.ts` and adds simple movement behavior for game entities.
-
-## Purpose
-
-A `Box` is:
-
-* A renderable rectangle
-* With movement speed
-* That automatically moves horizontally
-* And can participate in collisions
-
-It is primarily used in the demo as a moving obstacle.
+Below is a **synchronized and corrected version of the Box documentation**, aligned with the current codebase, followed by an explanation of how the demo integrates boxes into the game loop and how dependencies interact.
 
 ---
 
-# Box State
+# 📦 Box Module Documentation (Updated)
+
+The `box.ts` module defines a **moving, renderable rectangle entity** with optional player interaction and collision compatibility.
+
+It builds on top of `rect.ts` and extends it with:
+
+* Horizontal autonomous movement
+* Player-grab support (attach-to-player behavior)
+* Collision compatibility via `RectState`
+* Extra gameplay state flags
+
+---
+
+# 🧠 Box State
 
 ```ts
 export type BoxState = RectState & {
     speed: number;
+    grabbedByPlayer: boolean;
+    inGrid: boolean;
+    color: BoxColor;
+    offsetX?: number;
+    offsetY?: number;
 };
 ```
 
-`BoxState` extends `RectState` and adds:
+## Properties
 
-| Property | Type     | Description               |
-| -------- | -------- | ------------------------- |
-| `x`      | `number` | Horizontal position       |
-| `y`      | `number` | Vertical position         |
-| `width`  | `number` | Box width                 |
-| `height` | `number` | Box height                |
-| `color`  | `string` | Fill color                |
-| `speed`  | `number` | Horizontal movement speed |
-
-Because it extends `RectState`, a box can be reused anywhere rectangle collision or rendering is needed.
+| Property              | Type     | Description                    |
+| --------------------- | -------- | ------------------------------ |
+| `x, y`                | number   | Position (from `RectState`)    |
+| `width, height`       | number   | Size (from `RectState`)        |
+| `color`               | BoxColor | Logical color identifier       |
+| `speed`               | number   | Horizontal movement speed      |
+| `grabbedByPlayer`     | boolean  | If true, box follows player    |
+| `inGrid`              | boolean  | Reserved gameplay state flag   |
+| `offsetX` / `offsetY` | number   | Offset when attached to player |
 
 ---
 
-# createBox
-
-Creates a moving square box.
+# 🧱 createBox
 
 ```ts
 createBox(
     x: number,
     y: number,
+    color: BoxColor,
     size = 20,
     speed = 80
 ): BoxState
 ```
 
-## Parameters
+## Behavior
 
-| Parameter | Description                    |
-| --------- | ------------------------------ |
-| `x`       | Initial horizontal position    |
-| `y`       | Initial vertical position      |
-| `size`    | Width and height of the square |
-| `speed`   | Horizontal movement speed      |
+Creates a rectangle with:
 
-## Example
+* Semi-transparent color based on `color`
+* Default square size
+* Horizontal movement speed
+* Initial inactive interaction state
 
-```ts
-const box = createBox(650, 200);
-```
-
-## Default Appearance
-
-Boxes are created with:
+## Color mapping
 
 ```ts
-"rgba(255,0,0,.5)"
+red    -> rgba(255,0,0,.5)
+green  -> rgba(0,255,0,.5)
+yellow -> rgba(255,255,0,.5)
+purple -> rgba(128,0,128,.5)
 ```
-
-This produces a semi-transparent red square.
 
 ---
 
-# updateBox
-
-Updates horizontal movement.
+# 🔄 updateBox (Core Behavior)
 
 ```ts
 updateBox(
     box: BoxState,
     dt: number,
     startX: number,
-    endX: number
+    endX: number,
+    player?: PlayerState
 )
 ```
 
-## Behavior
+## 1. Player Grab Mode
 
-Each frame:
+If the box is grabbed:
+
+```ts
+if (box.grabbedByPlayer && player) {
+    box.x = player.x + (box.offsetX ?? 0);
+    box.y = player.y + (box.offsetY ?? 0);
+    return;
+}
+```
+
+### Effect
+
+* Box becomes **attached to player**
+* Movement is fully controlled by player position
+* Offset preserves relative grab position
+
+---
+
+## 2. Idle / Disabled Movement
+
+```ts
+if (box.speed === 0) return;
+```
+
+* Box becomes static if speed is 0
+* Still valid for collisions
+
+---
+
+## 3. Automatic Horizontal Movement
 
 ```ts
 box.x += box.speed * dt;
 ```
 
-The box moves to the right using delta time.
+Boxes move continuously to the right using delta time.
 
-When the box moves beyond `endX`:
+---
+
+## 4. Screen Wrapping
 
 ```ts
 if (box.x > endX) {
@@ -111,21 +137,11 @@ if (box.x > endX) {
 }
 ```
 
-it wraps back to `startX`.
-
-This creates a continuous looping movement.
-
-## Example
-
-```ts
-updateBox(box, dt, 650, 950);
-```
+This creates an **infinite looping conveyor effect**.
 
 ---
 
-# renderBox
-
-Renders the box to the canvas.
+# 🎨 renderBox
 
 ```ts
 renderBox(
@@ -134,23 +150,36 @@ renderBox(
 )
 ```
 
-Internally it delegates rendering to `renderRect`.
-
-## Example
+Delegates rendering to:
 
 ```ts
-renderBox(box, ctx);
+renderRect(box, ctx);
 ```
 
----
-
-# Demo/Game Integration
-
-The `BoxDemo` class demonstrates how boxes integrate with the engine, player movement, rendering, audio, and collision systems.
+No custom rendering logic is added beyond color + rectangle drawing.
 
 ---
 
-# Game State Structure
+# 🎮 Demo Integration (BoxDemo)
+
+The `BoxDemo` class demonstrates how boxes function inside a full game loop using the engine.
+
+```ts
+export class BoxDemo implements IGame {
+```
+
+It integrates:
+
+* Renderer
+* Input system
+* Audio system
+* Player system
+* Collision system
+* Box system
+
+---
+
+# 🧩 Game State
 
 ```ts
 type GameState = {
@@ -163,74 +192,71 @@ type GameState = {
 };
 ```
 
-## Important Relationships
+## Key relationships
 
-### `boxes`
-
-Stores the active moving boxes:
+### boxes
 
 ```ts
-boxes: BoxState[];
+boxes: BoxState[]
 ```
 
-### `colliders`
-
-Stores collision rectangles used by the collision system:
-
-```ts
-colliders: RectState[];
-```
-
-Boxes are inserted into the collider list:
-
-```ts
-colliders: [
-    ...boxes
-]
-```
-
-Because `BoxState` extends `RectState`, boxes can be treated as generic collision rectangles.
+Active moving gameplay objects.
 
 ---
 
-# Game Creation
+### colliders
 
-Boxes are created during initialization:
+```ts
+colliders: RectState[]
+```
+
+Collision system input.
+
+Important detail:
+
+> Boxes are directly inserted into colliders because `BoxState extends RectState`
+
+```ts
+colliders: [...boxes]
+```
+
+This allows **zero conversion cost** between gameplay and physics.
+
+---
+
+# 🏗️ Game Initialization
 
 ```ts
 const boxes = [
-    createBox(650, 200),
-    createBox(650, 230),
-    createBox(650, 260),
-    createBox(650, 290)
+    createBox(650, 200, "red"),
+    createBox(650, 230, "green"),
+    createBox(650, 260, "yellow"),
+    createBox(650, 290, "purple")
 ];
 ```
 
-This creates a vertical row of moving obstacles.
+### Layout behavior
 
-The player is also initialized:
-
-```ts
-player: new Player(960 - 25, 350, 200, 50)
-```
+* Vertical stack
+* Same X coordinate (lane)
+* Different Y positions
+* Independent movement states
 
 ---
 
-# Update Flow
+# 🔁 Update Loop
 
-Each frame:
-
-## 1. Player Updates
+## 1. Player Update
 
 ```ts
 const moved = state.player.update(dt, state.input);
 ```
 
-The player processes input and movement.
+Returns whether movement occurred.
 
 ---
 
-## 2. Audio Trigger
+## 2. Audio Feedback
 
 ```ts
 if (moved) {
@@ -238,11 +264,11 @@ if (moved) {
 }
 ```
 
-Movement sound plays only when the player moves.
+Simple feedback loop tied to input activity.
 
 ---
 
-## 3. Boxes Update
+## 3. Box Simulation
 
 ```ts
 for (const box of state.boxes) {
@@ -250,12 +276,16 @@ for (const box of state.boxes) {
 }
 ```
 
-Every box moves horizontally and loops back when exceeding the boundary.
-
-Movement range:
+### Movement region:
 
 * Start: `650`
 * End: `950`
+
+Each box:
+
+* Moves right
+* Wraps back to start
+* Remains active in collision system
 
 ---
 
@@ -268,15 +298,15 @@ resolvePlayerRectCollisions(
 );
 ```
 
-The player's rectangle is checked against all collider rectangles.
+### What happens here:
 
-Since boxes are included in `colliders`, the player collides with moving boxes automatically.
+* Player rectangle is tested against all colliders
+* Colliders include boxes
+* Collision is agnostic to entity type due to shared `RectState`
 
 ---
 
-# Render Flow
-
-Rendering occurs in this order:
+# 🖼️ Render Loop
 
 ## 1. Clear Screen
 
@@ -294,7 +324,8 @@ for (const box of state.boxes) {
 }
 ```
 
-All moving obstacles are drawn.
+* Draws all moving obstacles
+* Order does not affect gameplay logic
 
 ---
 
@@ -304,60 +335,143 @@ All moving obstacles are drawn.
 state.player.render(ctx, alpha);
 ```
 
-The player is rendered after the boxes.
+* Rendered after boxes
+* Uses interpolation (`alpha`) for smooth movement
 
 ---
 
-# Design Notes
+# 🔗 Dependency Relationships
 
-This architecture demonstrates several reusable patterns:
+## rect.ts (Base Layer)
 
-## Composition Over Duplication
+Provides:
 
-`BoxState` extends `RectState` instead of redefining rectangle properties.
+* `RectState`
+* `createRect`
+* `renderRect`
 
----
+Used by:
 
-## Shared Collision Types
-
-Any object compatible with `RectState` can participate in collision detection.
-
----
-
-## Decoupled Rendering
-
-`renderBox` delegates rendering to `renderRect`.
-
-This keeps rendering logic centralized.
+* Box system
+* Collision system
+* Player collision integration
 
 ---
 
-## Stateless Update Functions
+## box.ts (Gameplay Entity Layer)
 
-`updateBox` only mutates the provided state object and depends entirely on parameters:
+Builds on:
+
+* `RectState` (geometry contract)
+* `renderRect` (rendering reuse)
+
+Extends with:
+
+* Movement system
+* Player interaction state
+* Game-specific flags
+
+---
+
+## player.ts (Actor Layer)
+
+Provides:
+
+* Movement + input handling
+* Interpolated rendering
+* Position history (`prevX/prevY`)
+
+Used by:
+
+* Box grabbing logic
+* Collision resolution system
+
+---
+
+## collision system (external)
 
 ```ts
-updateBox(box, dt, startX, endX)
+resolvePlayerRectCollisions(player, colliders)
 ```
 
-This makes behavior predictable and reusable.
+Consumes:
+
+* Player rectangle
+* Box rectangles (via `colliders`)
 
 ---
 
-# Summary
+# 🧩 Design Summary
 
-The box system provides:
+This system demonstrates a clean layered architecture:
 
-* Reusable rectangle-based entities
-* Automatic horizontal movement
-* Looping obstacle behavior
-* Shared collision compatibility
-* Simple rendering integration
+### 1. Geometry Layer
 
-The demo shows how boxes can be integrated into:
+`RectState`
 
-* Game state management
-* Update loops
-* Rendering pipelines
-* Collision systems
-* Audio-triggered gameplay logic
+→ pure data shape
+
+---
+
+### 2. Entity Layer
+
+`BoxState`, `PlayerState`
+
+→ adds behavior/state
+
+---
+
+### 3. Simulation Layer
+
+`updateBox`, `updatePlayer`
+
+→ deterministic update logic
+
+---
+
+### 4. Engine Layer
+
+`BoxDemo`
+
+→ orchestrates:
+
+* input
+* audio
+* update loop
+* rendering
+* collisions
+
+---
+
+# 📌 Key Improvements in Current Code (vs Docs)
+
+* ✔ Boxes can now be **grabbed by player**
+* ✔ Boxes support **offset-based attachment**
+* ✔ Boxes include **extra state flags (`inGrid`)**
+* ✔ Player can influence box position indirectly
+* ✔ Collision system is fully type-polymorphic via `RectState`
+* ✔ Movement can be disabled via `speed = 0`
+
+---
+
+# 🧾 Final Summary
+
+The current box system is no longer just a moving obstacle system.
+
+It now supports:
+
+* Autonomous movement
+* Player attachment (grab mechanics)
+* Collision participation
+* Shared rendering model
+* Extensible gameplay flags
+
+The `BoxDemo` ties everything together into a minimal but complete gameplay loop where:
+
+> Input → Player → Boxes → Collisions → Rendering → Audio feedback
+
+If you want, I can next:
+
+* refactor this into ECS-style components
+* or suggest improvements to collision + grabbing logic
+* or diagram the entire update pipeline visually
