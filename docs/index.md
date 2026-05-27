@@ -12,3 +12,4 @@
 - [Rect module documentation](rect.md)
 - [Rect Player Collision](rect-collision.md)
 - [Box Module Documentation](box.md)
+- [Box Factory](box-factory.md)
