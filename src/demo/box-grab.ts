@@ -11,6 +11,7 @@ import {
 } from "./../conveyor-belt";
 import type { RectState } from "../rect";
 import { createBoxFactory, renderBoxFactory, updateBoxFactory, type BoxFactoryState } from "../box-factory";
+import { handleBoxGrab } from "../box";
 
 export class BoxGrabDemo implements IGame {
     private state: GameState;
@@ -90,46 +91,19 @@ function updateGame(
         state.audio.play("move");
     }
 
-    updateBoxFactory(state.boxFactory, dt, state.player.state);
+    const playerState = state.player.state
+
+    updateBoxFactory(state.boxFactory, dt, playerState);
     updateConveyorBelt(state.conveyor, dt);
 
-    const playerState = state.player.state;
-
-    if (state.input.isPressed("e")) {
-        for (const box of state.boxFactory.boxes) {
-            if (box.inGrid) continue;
-
-            if (box.grabbedByPlayer) {
-                box.grabbedByPlayer = false;
-                break;
-            }
-
-            const grabRange = 80;
-
-            const playerCenterX = playerState.x + playerState.size / 2;
-            const playerCenterY = playerState.y + playerState.size / 2;
-
-            const boxCenterX = box.x + box.width / 2;
-            const boxCenterY = box.y + box.height / 2;
-
-            const dx = playerCenterX - boxCenterX;
-            const dy = playerCenterY - boxCenterY;
-
-            if (Math.hypot(dx, dy) < grabRange) {
-                box.grabbedByPlayer = true;
-                box.offsetX = box.x - playerState.x;
-                box.offsetY = box.y - playerState.y;
-                box.speed = 0;
-
-                break;
-            }
-        }
-
-        state.input.clearPressed();
-    }
+    handleBoxGrab(
+        state.boxFactory.boxes,
+        playerState,
+        state.input
+    );
 
     resolvePlayerRectCollisions(
-        state.player.state,
+        playerState,
         state.colliders
     );
 

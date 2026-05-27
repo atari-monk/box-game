@@ -1,3 +1,4 @@
+import type { Input } from "atari-monk-light-engine";
 import type { PlayerState } from "./player";
 import {
     type RectState,
@@ -72,4 +73,43 @@ export function renderBox(
     ctx: CanvasRenderingContext2D
 ) {
     renderRect(box, ctx);
+}
+
+export function handleBoxGrab(
+    boxes: BoxState[],
+    player: PlayerState,
+    input: Input
+) {
+    if (!input.isPressed("e")) return;
+
+    for (const box of boxes) {
+        if (box.inGrid) continue;
+
+        if (box.grabbedByPlayer) {
+            box.grabbedByPlayer = false;
+            break;
+        }
+
+        const grabRange = 80;
+
+        const playerCenterX = player.x + player.size / 2;
+        const playerCenterY = player.y + player.size / 2;
+
+        const boxCenterX = box.x + box.width / 2;
+        const boxCenterY = box.y + box.height / 2;
+
+        const dx = playerCenterX - boxCenterX;
+        const dy = playerCenterY - boxCenterY;
+
+        if (Math.hypot(dx, dy) < grabRange) {
+            box.grabbedByPlayer = true;
+            box.offsetX = box.x - player.x;
+            box.offsetY = box.y - player.y;
+            box.speed = 0;
+
+            break;
+        }
+    }
+
+    input.clearPressed();
 }
