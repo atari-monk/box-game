@@ -13,3 +13,4 @@
 - [Kolizja Prostokąt Gracz](rect-collision.md)
 - [Dokumentacja modułu Box](box.md)
 - [Fabryka pudełek](box-factory.md)
+- [System chwytania skrzynek](box-grab.md)
