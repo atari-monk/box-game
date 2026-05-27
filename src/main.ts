@@ -5,9 +5,11 @@ import {
     Audio,
     GameLoop
 } from "atari-monk-light-engine";
+import { PlayerDemo } from "./demo/player";
 import { RectDemo } from "./demo/rect";
 import { ConveyorBeltDemo } from "./demo/conveyor-belt";
 import { BoxDemo } from "./demo/box";
+import { BoxFactoryDemo } from "./demo/box-factory";
 import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
