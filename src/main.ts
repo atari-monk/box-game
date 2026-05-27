@@ -10,6 +10,7 @@ import { RectDemo } from "./demo/rect";
 import { ConveyorBeltDemo } from "./demo/conveyor-belt";
 import { BoxDemo } from "./demo/box";
 import { BoxFactoryDemo } from "./demo/box-factory";
+import { BoxGrabDemo } from "./demo/box-grab";
 import { Game } from "./oop/game";
 
 const renderer = new Renderer("canvas");
@@ -22,7 +23,7 @@ const audio = new Audio();
     await audio.load("bg", "./sounds/bg.mp3");
 })();
 
-const game = new Game(renderer, input, audio);
+const game = new BoxGrabDemo(renderer, input, audio);
 
 const overlay = document.getElementById("start-overlay");
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
