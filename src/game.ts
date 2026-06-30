@@ -1,11 +1,11 @@
 import type { Renderer, Input, Audio } from "atari-monk-atom-engine";
-import { createRect, renderRect, updateRect, type RectState } from "./shared/rect";
+import { createPlayer, renderPlayer, updatePlayer, type PlayerState } from "./shared/player";
 
 export type GameState = {
     renderer: Renderer;
     input: Input;
     audio: Audio;
-    rect: RectState;
+    player: PlayerState;
 };
 
 export function createGame(
@@ -17,7 +17,7 @@ export function createGame(
         renderer,
         input,
         audio,
-        rect: createRect(960 - 50, 540 - 50, 100, 100),
+        player: createPlayer(960 - 25, 540 - 25, 200, 50),
     };
 }
 
@@ -25,19 +25,23 @@ export function updateGame(
     state: GameState,
     dt: number
 ) {
-    updateRect(state.rect, dt);
+    const moved = updatePlayer(state.player, dt, state.input);
+    if (moved) {
+        state.audio.play("move");
+    }
 }
 
 export function renderGame(
     state: GameState,
-    _alpha: number
+    alpha: number
 ) {
     const ctx = state.renderer.ctx
 
     state.renderer.clear();
 
-    renderRect(
-        state.rect,
-        ctx
+    renderPlayer(
+        state.player,
+        ctx,
+        alpha
     );
 }

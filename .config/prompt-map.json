@@ -1,0 +1,21 @@
+{
+    "question": {
+        "question": [
+            "/home/atari-monk/atari-monk/project/box-game/docs/temp.md"
+        ],
+        "context": [
+            "/home/atari-monk/atari-monk/project/box-game/src/shared/player.ts"
+        ]
+    },
+    "implementation": {
+        "rules": [
+            "/home/atari-monk/atari-monk/project/prompts/rules/code.md"
+        ],
+        "requirements": [
+            ""
+        ],
+        "codebase": [
+            ""
+        ]
+    }
+}
