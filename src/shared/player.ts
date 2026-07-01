@@ -1,4 +1,5 @@
 import { Input } from "atari-monk-atom-engine";
+import type { BoxState } from "./box";
 
 export type PlayerState = {
     x: number;
@@ -12,6 +13,8 @@ export type PlayerState = {
 
     speed: number;
     size: number;
+
+    grabRange: number;
 };
 
 export function createPlayer(
@@ -28,7 +31,8 @@ export function createPlayer(
         dirX: 1,
         dirY: 0,
         speed,
-        size
+        size,
+        grabRange: 80
     };
 }
 
@@ -91,4 +95,33 @@ export function renderPlayer(
     ctx.fillRect(0, -width / 2, length, width);
 
     ctx.restore();
+}
+
+export function handleBoxGrab(state: PlayerState, boxes: BoxState[]) {
+    for (const box of boxes) {
+        if (box.inGrid) continue;
+
+        if (box.grabbedByPlayer) {
+            box.grabbedByPlayer = false;
+            break;
+        }
+
+        const playerCenterX = state.x + state.size / 2;
+        const playerCenterY = state.y + state.size / 2;
+
+        const boxCenterX = box.x + box.width / 2;
+        const boxCenterY = box.y + box.height / 2;
+
+        const dx = playerCenterX - boxCenterX;
+        const dy = playerCenterY - boxCenterY;
+
+        if (Math.hypot(dx, dy) < state.grabRange) {
+            box.grabbedByPlayer = true;
+            box.offsetX = box.x - state.x;
+            box.offsetY = box.y - state.y;
+            box.speed = 0;
+
+            break;
+        }
+    }
 }

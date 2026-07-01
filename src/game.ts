@@ -1,5 +1,5 @@
 import type { Renderer, Input, Audio } from "atari-monk-atom-engine";
-import { createPlayer, renderPlayer, updatePlayer, type PlayerState } from "./shared/player";
+import { createPlayer, handleBoxGrab, renderPlayer, updatePlayer, type PlayerState } from "./shared/player";
 import { resolvePlayerRectCollisions } from "./shared/collision";
 import { createConveyorBelt, getConveyorColliders, renderConveyorBelt, renderConveyorGates, toggleConveyorPoints, updateConveyorBelt, type ConveyorBeltState } from "./shared/conveyor-belt";
 import type { RectState } from "./shared/rect";
@@ -75,6 +75,11 @@ export function updateGame(
         state.player,
         state.colliders
     );
+
+    if (state.input.isPressed("e")) {
+        handleBoxGrab(state.player, state.boxFactory.boxes);
+        state.input.clearPressed();
+    }
 
     if (state.input.isPressed("p")) {
         toggleConveyorPoints(state.conveyor);
