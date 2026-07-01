@@ -9,6 +9,14 @@ import {
     updateBoxFactory,
     type BoxFactoryState
 } from "./shared/box-factory";
+import {
+    createGridCluster,
+    updateGridCluster,
+    renderGridCluster,
+    type GridCluster,
+    toggleClusterPoint
+} from "./shared/box-grid-cluster";
+import { fillGrids } from "./shared/box-gird";
 
 export type GameState = {
     renderer: Renderer;
@@ -18,6 +26,7 @@ export type GameState = {
     conveyor: ConveyorBeltState;
     colliders: RectState[];
     boxFactory: BoxFactoryState;
+    boxGridCluster: GridCluster;
 };
 
 export function createGame(
@@ -48,6 +57,8 @@ export function createGame(
         }
     });
 
+    const boxGridCluster = createGridCluster(960, 400, 25, 2, 2, 200, 100);
+
     return {
         renderer,
         input,
@@ -56,6 +67,7 @@ export function createGame(
         conveyor,
         colliders: getConveyorColliders(conveyor),
         boxFactory,
+        boxGridCluster,
     };
 }
 
@@ -69,6 +81,7 @@ export function updateGame(
     }
 
     updateBoxFactory(state.boxFactory, dt, state.player);
+    updateGridCluster(state.boxGridCluster, state.boxFactory.boxes);
     updateConveyorBelt(state.conveyor, dt);
 
     resolvePlayerRectCollisions(
@@ -81,8 +94,14 @@ export function updateGame(
         state.input.clearPressed();
     }
 
+    if (state.input.isPressed("f")) {
+        fillGrids(state.boxGridCluster.grids, state.boxFactory.boxes);
+        state.input.clearPressed();
+    }
+
     if (state.input.isPressed("p")) {
         toggleConveyorPoints(state.conveyor);
+        toggleClusterPoint(state.boxGridCluster);
         state.input.clearPressed();
     }
 }
@@ -96,6 +115,7 @@ export function renderGame(
     state.renderer.clear();
 
     renderConveyorBelt(state.conveyor, state.renderer.ctx);
+    renderGridCluster(state.boxGridCluster, state.renderer.ctx);
     renderBoxFactory(state.boxFactory, state.renderer.ctx);
     renderConveyorGates(state.conveyor, state.renderer.ctx);
 
