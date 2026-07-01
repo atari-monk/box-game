@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/collision && cp -r ./sounds ../pages/box-game/collision"
+    "publish": "cp -r ./dist/. ../pages/box-game/conveyor-belt && cp -r ./sounds ../pages/box-game/conveyor-belt"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

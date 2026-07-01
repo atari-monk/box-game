@@ -1,14 +1,16 @@
 import type { Renderer, Input, Audio } from "atari-monk-atom-engine";
 import { createPlayer, renderPlayer, updatePlayer, type PlayerState } from "./shared/player";
-import { createRect, renderRect, type RectState } from "./shared/rect";
 import { resolvePlayerRectCollisions } from "./shared/collision";
+import { createConveyorBelt, getConveyorColliders, renderConveyorBelt, updateConveyorBelt, type ConveyorBeltState } from "./shared/conveyor-belt";
+import type { RectState } from "./shared/rect";
 
 export type GameState = {
     renderer: Renderer;
     input: Input;
     audio: Audio;
     player: PlayerState;
-    rect: RectState
+    conveyor: ConveyorBeltState;
+    colliders: RectState[];
 };
 
 export function createGame(
@@ -16,12 +18,23 @@ export function createGame(
     input: Input,
     audio: Audio
 ): GameState {
+
+    const conveyor = createConveyorBelt({
+        centerX: 960,
+        centerY: 60,
+        length: 700,
+        width: 40,
+        gateWidth: 100,
+        gateHeight: 100
+    });
+
     return {
         renderer,
         input,
         audio,
         player: createPlayer(960 - 25, 540 - 25 - 100, 200, 50),
-        rect: createRect(960 - 25, 540 - 25, 50, 50, "yellow")
+        conveyor,
+        colliders: getConveyorColliders(conveyor),
     };
 }
 
@@ -34,9 +47,11 @@ export function updateGame(
         state.audio.play("move");
     }
 
+    updateConveyorBelt(state.conveyor, dt);
+
     resolvePlayerRectCollisions(
         state.player,
-        [state.rect]
+        state.colliders
     );
 }
 
@@ -48,7 +63,7 @@ export function renderGame(
 
     state.renderer.clear();
 
-    renderRect(state.rect, ctx);
+    renderConveyorBelt(state.conveyor, state.renderer.ctx);
 
     renderPlayer(
         state.player,
