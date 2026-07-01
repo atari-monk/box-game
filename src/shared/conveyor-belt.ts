@@ -46,7 +46,7 @@ export function createConveyorBelt(
         config.centerY - config.gateHeight / 2,
         config.gateWidth,
         config.gateHeight,
-        "rgba(173, 216, 230, .5)"
+        "rgba(173, 216, 230, 1)"
     );
 
     const rightGate = createRect(
@@ -54,7 +54,7 @@ export function createConveyorBelt(
         config.centerY - config.gateHeight / 2,
         config.gateWidth,
         config.gateHeight,
-        "rgba(173, 216, 230, .5)"
+        "rgba(173, 216, 230, 1)"
     );
 
     const startX = leftGate.x + leftGate.width / 2;
@@ -99,12 +99,21 @@ export function renderConveyorBelt(
     ctx: CanvasRenderingContext2D
 ) {
     renderRect(state.belt, ctx);
+
+    if (!state.pointsEnabled) return;
+
+    renderPoint(state.centerPoint, ctx);
+}
+
+export function renderConveyorGates(
+    state: ConveyorBeltState,
+    ctx: CanvasRenderingContext2D
+) {
     renderRect(state.leftGate, ctx);
     renderRect(state.rightGate, ctx);
 
     if (!state.pointsEnabled) return;
 
-    renderPoint(state.centerPoint, ctx);
     renderPoint(state.leftGatePoint, ctx);
     renderPoint(state.rightGatePoint, ctx);
 }

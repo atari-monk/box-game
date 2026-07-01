@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/conveyor-belt && cp -r ./sounds ../pages/box-game/conveyor-belt"
+    "publish": "cp -r ./dist/. ../pages/box-game/box-factory && cp -r ./sounds ../pages/box-game/box-factory"
   },
   "devDependencies": {
+    "rimraf": "^6.1.3",
     "typescript": "~6.0.2",
     "vite": "^8.0.12"
   },
