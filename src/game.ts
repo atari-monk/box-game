@@ -17,6 +17,12 @@ import {
     toggleClusterPoint
 } from "./shared/box-grid-cluster";
 import { fillGrids } from "./shared/box-gird";
+import {
+    createLift,
+    updateLift,
+    renderLift,
+    type LiftState
+} from "./shared/workshop-lift";
 
 export type GameState = {
     renderer: Renderer;
@@ -27,6 +33,7 @@ export type GameState = {
     colliders: RectState[];
     boxFactory: BoxFactoryState;
     boxGridCluster: GridCluster;
+    lift: LiftState;
 };
 
 export function createGame(
@@ -58,16 +65,19 @@ export function createGame(
     });
 
     const boxGridCluster = createGridCluster(960, 400, 25, 2, 2, 200, 100);
+    const playerSize = 50;
+    const lift = createLift(700, 400, playerSize);
 
     return {
         renderer,
         input,
         audio,
-        player: createPlayer(960 - 25, 540 - 25 - 100, 200, 50),
+        player: createPlayer(960 - 25, 540 - 25 - 100, 200, playerSize),
         conveyor,
         colliders: getConveyorColliders(conveyor),
         boxFactory,
         boxGridCluster,
+        lift
     };
 }
 
@@ -83,6 +93,7 @@ export function updateGame(
     updateBoxFactory(state.boxFactory, dt, state.player);
     updateGridCluster(state.boxGridCluster, state.boxFactory.boxes);
     updateConveyorBelt(state.conveyor, dt);
+    updateLift(state.lift, state.player, state.input, state.boxGridCluster.grids);
 
     resolvePlayerRectCollisions(
         state.player,
@@ -115,6 +126,7 @@ export function renderGame(
     state.renderer.clear();
 
     renderConveyorBelt(state.conveyor, state.renderer.ctx);
+    renderLift(state.lift, state.renderer.ctx);
     renderGridCluster(state.boxGridCluster, state.renderer.ctx);
     renderBoxFactory(state.boxFactory, state.renderer.ctx);
     renderConveyorGates(state.conveyor, state.renderer.ctx);

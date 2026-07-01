@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/box-grid-cluster && cp -r ./sounds ../pages/box-game/box-grid-cluster"
+    "publish": "cp -r ./dist/. ../pages/box-game/workshop-lift && cp -r ./sounds ../pages/box-game/workshop-lift"
   },
   "devDependencies": {
     "rimraf": "^6.1.3",
