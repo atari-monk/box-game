@@ -1,7 +1,7 @@
 {
     "question": {
         "question": [
-            "/home/atari-monk/atari-monk/project/box-game/docs/temp.md"
+            "/home/atari-monk/atari-monk/project/box-game/docs/prompt.md"
         ],
         "context": [
             "/home/atari-monk/atari-monk/project/box-game/src/shared/player.ts"
@@ -12,10 +12,11 @@
             "/home/atari-monk/atari-monk/project/prompts/rules/code.md"
         ],
         "requirements": [
-            ""
+            "/home/atari-monk/atari-monk/project/box-game/docs/prompt.md"
         ],
         "codebase": [
-            ""
+            "/home/atari-monk/atari-monk/project/box-game/src/shared/high-score.ts",
+            "/home/atari-monk/atari-monk/project/box-game/src/game.ts"
         ]
     }
 }

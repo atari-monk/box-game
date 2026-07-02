@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/zones && cp -r ./sounds ../pages/box-game/zones"
+    "publish": "cp -r ./dist/. ../pages/box-game/high-score && cp -r ./sounds ../pages/box-game/high-score"
   },
   "devDependencies": {
     "rimraf": "^6.1.3",

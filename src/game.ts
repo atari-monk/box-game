@@ -29,6 +29,22 @@ import {
     updateZones,
     renderZones
 } from "./shared/zone";
+import {
+    createTimer,
+    startTimer,
+    updateTimer,
+    renderTimer,
+    type TimerState,
+    stopTimer,
+    getTimerSeconds
+} from "./shared/timer";
+import {
+    createHighScore,
+    addHighScore,
+    renderHighScores,
+    type HighScoreState,
+    //resetHighScores
+} from "./shared/high-score";
 
 export type GameState = {
     renderer: Renderer;
@@ -41,6 +57,9 @@ export type GameState = {
     boxGridCluster: GridCluster;
     lift: LiftState;
     zones: ZoneState[];
+    timer: TimerState;
+    highScore: HighScoreState;
+    scoreSaved: boolean;
 };
 
 export function createGame(
@@ -82,6 +101,9 @@ export function createGame(
         20
     );
 
+    const highScore = createHighScore()
+    //resetHighScores(highScore);
+
     return {
         renderer,
         input,
@@ -92,7 +114,10 @@ export function createGame(
         boxFactory,
         boxGridCluster,
         lift,
-        zones
+        zones,
+        timer: createTimer(),
+        highScore,
+        scoreSaved: false
     };
 }
 
@@ -100,8 +125,10 @@ export function updateGame(
     state: GameState,
     dt: number
 ) {
+    updateTimer(state.timer, dt);
     const moved = updatePlayer(state.player, dt, state.input);
     if (moved) {
+        startTimer(state.timer);
         state.audio.play("move");
     }
 
@@ -110,6 +137,7 @@ export function updateGame(
     updateConveyorBelt(state.conveyor, dt);
     updateLift(state.lift, state.player, state.input, state.boxGridCluster.grids);
     updateZones(state.zones, state.boxGridCluster.grids, state.lift.carriedGrid);
+    updateHighScore(state);
 
     resolvePlayerRectCollisions(
         state.player,
@@ -133,6 +161,18 @@ export function updateGame(
     }
 }
 
+export function updateHighScore(state: GameState) {
+    if (!state.scoreSaved &&
+        state.zones.every(zone => zone.active)) {
+        stopTimer(state.timer);
+        addHighScore(
+            state.highScore,
+            getTimerSeconds(state.timer)
+        );
+        state.scoreSaved = true;
+    }
+}
+
 export function renderGame(
     state: GameState,
     alpha: number
@@ -147,4 +187,6 @@ export function renderGame(
     renderBoxFactory(state.boxFactory, ctx);
     renderConveyorGates(state.conveyor, ctx);
     renderPlayer(state.player, ctx, alpha);
+    renderTimer(state.timer, ctx);
+    renderHighScores(state.highScore, ctx);
 }
