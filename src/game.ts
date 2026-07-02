@@ -23,6 +23,12 @@ import {
     renderLift,
     type LiftState
 } from "./shared/workshop-lift";
+import {
+    type ZoneState,
+    createZonesRow,
+    updateZones,
+    renderZones
+} from "./shared/zone";
 
 export type GameState = {
     renderer: Renderer;
@@ -34,6 +40,7 @@ export type GameState = {
     boxFactory: BoxFactoryState;
     boxGridCluster: GridCluster;
     lift: LiftState;
+    zones: ZoneState[];
 };
 
 export function createGame(
@@ -68,6 +75,13 @@ export function createGame(
     const playerSize = 50;
     const lift = createLift(700, 400, playerSize);
 
+    const zones = createZonesRow(
+        960,
+        990,
+        80,
+        20
+    );
+
     return {
         renderer,
         input,
@@ -77,7 +91,8 @@ export function createGame(
         colliders: getConveyorColliders(conveyor),
         boxFactory,
         boxGridCluster,
-        lift
+        lift,
+        zones
     };
 }
 
@@ -94,6 +109,7 @@ export function updateGame(
     updateGridCluster(state.boxGridCluster, state.boxFactory.boxes);
     updateConveyorBelt(state.conveyor, dt);
     updateLift(state.lift, state.player, state.input, state.boxGridCluster.grids);
+    updateZones(state.zones, state.boxGridCluster.grids, state.lift.carriedGrid);
 
     resolvePlayerRectCollisions(
         state.player,
@@ -122,18 +138,13 @@ export function renderGame(
     alpha: number
 ) {
     const ctx = state.renderer.ctx
-
     state.renderer.clear();
 
-    renderConveyorBelt(state.conveyor, state.renderer.ctx);
-    renderLift(state.lift, state.renderer.ctx);
-    renderGridCluster(state.boxGridCluster, state.renderer.ctx);
-    renderBoxFactory(state.boxFactory, state.renderer.ctx);
-    renderConveyorGates(state.conveyor, state.renderer.ctx);
-
-    renderPlayer(
-        state.player,
-        ctx,
-        alpha
-    );
+    renderConveyorBelt(state.conveyor, ctx);
+    renderLift(state.lift, ctx);
+    renderZones(state.zones, ctx);
+    renderGridCluster(state.boxGridCluster, ctx);
+    renderBoxFactory(state.boxFactory, ctx);
+    renderConveyorGates(state.conveyor, ctx);
+    renderPlayer(state.player, ctx, alpha);
 }

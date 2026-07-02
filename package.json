@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/workshop-lift && cp -r ./sounds ../pages/box-game/workshop-lift"
+    "publish": "cp -r ./dist/. ../pages/box-game/zones && cp -r ./sounds ../pages/box-game/zones"
   },
   "devDependencies": {
     "rimraf": "^6.1.3",
