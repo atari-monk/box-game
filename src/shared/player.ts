@@ -1,5 +1,12 @@
 import { Input } from "atari-monk-atom-engine";
 import type { BoxState } from "./box";
+import {
+    type SpriteAnimatorState,
+    createSpriteAnimator,
+    renderSpriteAnimator,
+    setSpriteAnimation,
+    updateSpriteAnimator
+} from "./sprite-animator";
 
 export type PlayerState = {
     x: number;
@@ -15,13 +22,17 @@ export type PlayerState = {
     size: number;
 
     grabRange: number;
+
+    useSprite: boolean;
+    sprite: SpriteAnimatorState;
 };
 
 export function createPlayer(
     x = 960 - 25,
     y = 350,
     speed = 200,
-    size = 50
+    size = 50,
+    spriteSheet: HTMLImageElement
 ): PlayerState {
     return {
         x,
@@ -32,7 +43,17 @@ export function createPlayer(
         dirY: 0,
         speed,
         size,
-        grabRange: 80
+        grabRange: 80,
+        useSprite: true,
+        sprite: createSpriteAnimator(
+            spriteSheet,
+            256,
+            256,
+            [
+                { row: 0, frames: 4, fps: 5 },
+                { row: 1, frames: 8, fps: 5 }
+            ]
+        )
     };
 }
 
@@ -47,12 +68,14 @@ export function updatePlayer(
     let dx = 0;
     let dy = 0;
 
-    if (input.isDown("ArrowRight")) dx += 1;
-    if (input.isDown("ArrowLeft")) dx -= 1;
-    if (input.isDown("ArrowUp")) dy -= 1;
-    if (input.isDown("ArrowDown")) dy += 1;
+    if (input.isDown("ArrowRight")) dx++;
+    if (input.isDown("ArrowLeft")) dx--;
+    if (input.isDown("ArrowUp")) dy--;
+    if (input.isDown("ArrowDown")) dy++;
 
-    if (dx !== 0 || dy !== 0) {
+    const moving = dx !== 0 || dy !== 0;
+
+    if (moving) {
         const length = Math.hypot(dx, dy);
 
         dx /= length;
@@ -64,10 +87,16 @@ export function updatePlayer(
         state.x += dx * state.speed * dt;
         state.y += dy * state.speed * dt;
 
-        return true;
+        state.sprite.flipX = dx < 0;
+
+        setSpriteAnimation(state.sprite, 1);
+    } else {
+        setSpriteAnimation(state.sprite, 0);
     }
 
-    return false;
+    updateSpriteAnimator(state.sprite, dt);
+
+    return moving;
 }
 
 export function renderPlayer(
@@ -78,6 +107,20 @@ export function renderPlayer(
     const x = state.prevX + (state.x - state.prevX) * alpha;
     const y = state.prevY + (state.y - state.prevY) * alpha;
 
+    if (state.useSprite)
+        renderSpriteAnimator(
+            state.sprite,
+            ctx,
+            x,
+            y,
+            state.size,
+            state.size
+        );
+    else
+        renderRect(ctx, x, y, state);
+}
+
+function renderRect(ctx: CanvasRenderingContext2D, x: number, y: number, state: PlayerState) {
     ctx.fillStyle = "red";
     ctx.fillRect(x, y, state.size, state.size);
 

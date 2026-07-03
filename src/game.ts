@@ -104,11 +104,14 @@ export function createGame(
     const highScore = createHighScore()
     //resetHighScores(highScore);
 
+    const playerImage = new Image();
+    playerImage.src = "/pages/box-game/sprite-animator/player.png";
+
     return {
         renderer,
         input,
         audio,
-        player: createPlayer(960 - 25, 540 - 25 - 100, 200, playerSize),
+        player: createPlayer(960 - 25, 540 - 25 - 100, 200, playerSize, playerImage),
         conveyor,
         colliders: getConveyorColliders(conveyor),
         boxFactory,

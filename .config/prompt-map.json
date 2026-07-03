@@ -15,8 +15,8 @@
             "/home/atari-monk/atari-monk/project/box-game/docs/prompt.md"
         ],
         "codebase": [
-            "/home/atari-monk/atari-monk/project/box-game/src/shared/high-score.ts",
-            "/home/atari-monk/atari-monk/project/box-game/src/game.ts"
+            "/home/atari-monk/atari-monk/project/box-game/docs/game-object.md",
+            "/home/atari-monk/atari-monk/project/box-game/src/shared/player.ts"
         ]
     }
 }

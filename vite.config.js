@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-    base: '/pages/box-game/high-score',
+    base: '/pages/box-game/sprite-animator',
 })
