@@ -91,7 +91,7 @@ export function createGame(
     });
 
     const boxGridCluster = createGridCluster(960, 400, 25, 2, 2, 200, 100);
-    const playerSize = 50;
+    const playerSize = 75;
     const lift = createLift(700, 400, playerSize);
 
     const zones = createZonesRow(
@@ -105,7 +105,7 @@ export function createGame(
     //resetHighScores(highScore);
 
     const playerImage = new Image();
-    playerImage.src = "/pages/box-game/sprite-animator/player.png";
+    playerImage.src = "/pages/box-game/player-sprite/player.png";
 
     return {
         renderer,

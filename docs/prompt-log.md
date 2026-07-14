@@ -1,4 +1,4 @@
-## Log
+## Prompt Log
 
 ### Timer
 

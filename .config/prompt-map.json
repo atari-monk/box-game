@@ -4,7 +4,7 @@
             "/home/atari-monk/atari-monk/project/box-game/docs/prompt.md"
         ],
         "context": [
-            "/home/atari-monk/atari-monk/project/box-game/src/shared/player.ts"
+            "/home/atari-monk/atari-monk/project/box-game/docs/empty.md"
         ]
     },
     "implementation": {

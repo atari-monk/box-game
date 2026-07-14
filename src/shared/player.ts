@@ -50,8 +50,11 @@ export function createPlayer(
             256,
             256,
             [
-                { row: 0, frames: 4, fps: 5 },
-                { row: 1, frames: 8, fps: 5 }
+                { row: 0, frames: 24, fps: 24 },
+                { row: 1, frames: 24, fps: 24 },
+                { row: 2, frames: 24, fps: 24 },
+                { row: 3, frames: 24, fps: 24 },
+                { row: 4, frames: 24, fps: 24 }
             ]
         )
     };
@@ -87,11 +90,27 @@ export function updatePlayer(
         state.x += dx * state.speed * dt;
         state.y += dy * state.speed * dt;
 
-        state.sprite.flipX = dx < 0;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal movement
+            if (dx > 0) {
+                setSpriteAnimation(state.sprite, 3); // walk right
+                state.sprite.flipX = false;
+            } else {
+                setSpriteAnimation(state.sprite, 2); // walk left
+                state.sprite.flipX = false;
+            }
+        } else {
+            // Vertical movement
+            if (dy > 0) {
+                setSpriteAnimation(state.sprite, 1); // walk down
+            } else {
+                setSpriteAnimation(state.sprite, 4); // walk up
+            }
+            state.sprite.flipX = false;
+        }
 
-        setSpriteAnimation(state.sprite, 1);
     } else {
-        setSpriteAnimation(state.sprite, 0);
+        setSpriteAnimation(state.sprite, 0); // idle
     }
 
     updateSpriteAnimator(state.sprite, dt);

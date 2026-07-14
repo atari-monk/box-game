@@ -1,0 +1,1 @@
+- [Character modeling for beginners - Blender](https://youtu.be/O6HQhs-gk50)

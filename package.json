@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "publish": "cp -r ./dist/. ../pages/box-game/sprite-animator && cp -r ./sounds ../pages/box-game/sprite-animator"
+    "publish": "cp -r ./dist/. ../pages/box-game/player-sprite && cp -r ./sounds ../pages/box-game/player-sprite"
   },
   "devDependencies": {
     "rimraf": "^6.1.3",
