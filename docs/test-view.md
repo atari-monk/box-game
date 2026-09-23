@@ -1,44 +1,47 @@
-- Debug view with points to mesure stuff
-- Stored in md in case of need
+## Test View
 
-`test-view.ts`:
+Debug view with points to mesure stuff.
+
+### Code
+
+`test-view.ts`
 
 ```ts
 import { createPoint, renderPoint, type PointState } from "./draw-point";
 
 export type TestViewState = {
-    enabled: boolean;
-    point: PointState;
+  enabled: boolean;
+  point: PointState;
 };
 
 export function createTestView(
-    screenWidth: number,
-    screenHeight: number
+  screenWidth: number,
+  screenHeight: number,
 ): TestViewState {
-    const centerX = screenWidth / 2;
-    const centerY = screenHeight / 2;
+  const centerX = screenWidth / 2;
+  const centerY = screenHeight / 2;
 
-    return {
-        enabled: false,
-        point: createPoint(centerX, centerY)
-    };
+  return {
+    enabled: false,
+    point: createPoint(centerX, centerY),
+  };
 }
 
 export function renderTestView(
-    state: TestViewState,
-    ctx: CanvasRenderingContext2D
+  state: TestViewState,
+  ctx: CanvasRenderingContext2D,
 ) {
-    if (!state.enabled) return;
+  if (!state.enabled) return;
 
-    renderPoint(state.point, ctx);
+  renderPoint(state.point, ctx);
 }
 
 export function toggleTestView(state: TestViewState) {
-    state.enabled = !state.enabled;
+  state.enabled = !state.enabled;
 }
 ```
 
-`game.ts`:
+### Usage
 
 ```ts
 //GameState
